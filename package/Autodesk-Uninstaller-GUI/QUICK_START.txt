@@ -1,0 +1,27 @@
+=====================================================
+AUTODESK UNINSTALLER TOOL - QUICK START GUIDE
+=====================================================
+
+INSTALLATION INSTRUCTIONS:
+
+1. Extract all files to a location of your choice
+   (e.g., Desktop or Documents folder)
+
+2. RIGHT-CLICK on "Run-Autodesk-Uninstaller.bat" and 
+   select "Run as administrator"
+
+3. The application will launch and open in your web browser
+
+4. Select the Autodesk products you want to uninstall
+
+5. Choose additional options if desired:
+   - Delete C:\Autodesk folder
+   - Restart computer after uninstallation
+
+6. Click "Uninstall Selected" and confirm when prompted
+
+7. Wait for the uninstallation to complete
+
+NOTE: Administrative privileges are REQUIRED to use this tool.
+
+=====================================================

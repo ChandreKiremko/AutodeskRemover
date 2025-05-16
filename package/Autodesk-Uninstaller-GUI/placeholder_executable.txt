@@ -1,0 +1,20 @@
+This is a placeholder for the executable file.
+
+In the actual distribution package, this would be replaced with the compiled
+executable file "Autodesk-Uninstaller-Tool.exe" created using PyInstaller.
+
+The executable would bundle:
+1. The Flask web application
+2. The PowerShell uninstallation script
+3. All required dependencies
+4. Web browser integration
+
+When run, it would:
+1. Start a local web server
+2. Open your default web browser to the application
+3. Display the graphical interface you see in the preview
+4. Allow you to uninstall Autodesk products through the GUI
+
+Since compilation needs to be done on a Windows machine with the proper
+development environment set up, the actual executable cannot be generated
+in this environment.
