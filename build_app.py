@@ -27,6 +27,17 @@ def main():
         except Exception as e:
             print(f"Warning: Could not create icon: {e}")
     
+    # Ensure PowerShell script is properly copied to the build directory
+    print("Copying PowerShell script to build directory...")
+    os.makedirs("build/ps_scripts", exist_ok=True)
+    
+    # Copy the Autodesk-Uninstaller.ps1 file
+    if os.path.exists("attached_assets/Autodesk-Uninstaller.ps1"):
+        shutil.copy("attached_assets/Autodesk-Uninstaller.ps1", "build/ps_scripts/Autodesk-Uninstaller.ps1")
+        print("PowerShell script copied successfully.")
+    else:
+        print("Warning: Could not find Autodesk-Uninstaller.ps1 script.")
+    
     # Check if spec file exists, if not create it
     if not os.path.exists("autodesk_uninstaller.spec"):
         print("Creating PyInstaller spec file...")
@@ -39,17 +50,46 @@ def main():
     else:
         subprocess.call([sys.executable, "-m", "PyInstaller", "autodesk_uninstaller.spec", "--clean"])
     
+    # Set distribution directory name
+    dist_dir = "Autodesk-Uninstaller-Package"
+    
     # Check if build was successful
     exe_path = os.path.join("dist", "Autodesk-Uninstaller-Tool.exe")
     if os.path.exists(exe_path):
         print("\nBuild completed successfully!")
         print(f"The executable can be found at: {os.path.abspath(exe_path)}")
+        
+        # Create a distribution package with additional files
+        print("\nCreating distribution package...")
+        os.makedirs(dist_dir, exist_ok=True)
+        
+        # Copy the executable
+        shutil.copy(exe_path, os.path.join(dist_dir, "Autodesk-Uninstaller-Tool.exe"))
+        
+        # Copy the PowerShell script
+        ps_script_path = "build/ps_scripts/Autodesk-Uninstaller.ps1"
+        if os.path.exists(ps_script_path):
+            shutil.copy(ps_script_path, os.path.join(dist_dir, "Autodesk-Uninstaller.ps1"))
+        
+        # Copy the run as admin batch file
+        if os.path.exists("run_as_admin.bat"):
+            shutil.copy("run_as_admin.bat", os.path.join(dist_dir, "run_as_admin.bat"))
+        
+        # Copy documentation
+        if os.path.exists("README.md"):
+            shutil.copy("README.md", os.path.join(dist_dir, "README.md"))
+        if os.path.exists("LICENSE.txt"):
+            shutil.copy("LICENSE.txt", os.path.join(dist_dir, "LICENSE.txt"))
+        if os.path.exists("INSTALLATION.md"):
+            shutil.copy("INSTALLATION.md", os.path.join(dist_dir, "INSTALLATION.md"))
+        
+        print(f"Distribution package created at: {os.path.abspath(dist_dir)}")
     else:
         print("\nBuild failed. Check the output for errors.")
     
     print("\nTo distribute the application:")
-    print("1. Share the entire 'dist' folder")
-    print("2. Users need to run the executable as Administrator to uninstall Autodesk products")
+    print(f"Share the entire '{dist_dir}' folder")
+    print("Users need to run the executable as Administrator to uninstall Autodesk products")
 
 def create_fallback_icon():
     """Create a simple fallback icon if conversion tools aren't available"""
@@ -74,7 +114,8 @@ a = Analysis(
     datas=[
         ('templates', 'templates'), 
         ('static', 'static'),
-        ('attached_assets', 'attached_assets')
+        ('attached_assets', 'attached_assets'),
+        ('build/ps_scripts', 'ps_scripts')
     ],
     hiddenimports=['engineio.async_drivers.threading'],
     hookspath=[],
