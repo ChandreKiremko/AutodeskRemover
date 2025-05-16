@@ -1,0 +1,140 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row">
+    <!-- Left side: Product selection -->
+    <div class="col-lg-7 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-0">Installed Autodesk Products</h5>
+                    <small class="text-muted">Select products to uninstall</small>
+                </div>
+                {% if products and products|length > 0 %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="select-all">
+                    <label class="form-check-label" for="select-all">Select All</label>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="card-body">
+                {% if not is_admin %}
+                    <div class="alert alert-warning mb-0">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                        <strong>Administrator Rights Required</strong>
+                        <p class="mb-0">This application requires administrator privileges to discover and uninstall Autodesk products. Please run as administrator.</p>
+                    </div>
+                {% elif products and products|length > 0 %}
+                    <div id="product-list" class="list-group product-list">
+                        {% for product in products %}
+                        <div class="list-group-item product-item d-flex align-items-center">
+                            <input type="checkbox" class="form-check-input me-3 product-checkbox" 
+                                   value="{{ product.psChildName }}" data-name="{{ product.displayName }}">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">{{ product.displayName }}</div>
+                                <div class="small text-muted">{{ product.publisher if product.publisher else "Unknown Publisher" }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info mb-0">
+                        No Autodesk products found installed.
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="card-footer d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="badge bg-secondary">Selected: <span id="selected-count">0</span></span>
+                </div>
+                <button id="uninstall-button" class="btn btn-danger" disabled>
+                    <i class="fa-solid fa-trash-can me-2"></i> Uninstall Selected
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Right side: Options and log -->
+    <div class="col-lg-5">
+        <!-- Options -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Additional Options</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-check mb-3">
+                    <input class="form-check-input options-control" type="checkbox" id="delete-folder">
+                    <label class="form-check-label" for="delete-folder">
+                        Delete C:\Autodesk folder after uninstallation
+                    </label>
+                    <small class="form-text text-muted d-block">
+                        This will remove all Autodesk files from your system.
+                    </small>
+                </div>
+                
+                <div class="form-check">
+                    <input class="form-check-input options-control" type="checkbox" id="restart-computer">
+                    <label class="form-check-label" for="restart-computer">
+                        Restart computer after uninstallation
+                    </label>
+                    <small class="form-text text-muted d-block">
+                        Recommended to complete the uninstallation process.
+                    </small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Progress and Log -->
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0">Uninstallation Progress</h5>
+            </div>
+            <div class="card-body">
+                <!-- Progress bar -->
+                <div id="progress-area" class="mb-3 d-none">
+                    <div class="progress" style="height: 10px;">
+                        <div id="uninstall-progress" class="progress-bar progress-bar-striped progress-bar-animated uninstall-progress" 
+                             role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+                
+                <!-- Log area -->
+                <h6 class="mb-2">Log</h6>
+                <div id="log-area" class="log-container mb-0"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirm-modal" tabindex="-1" aria-labelledby="confirm-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirm-modal-label">Confirm Uninstallation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                    <span>You are about to uninstall the following Autodesk products:</span>
+                </div>
+                
+                <ul id="confirm-product-list" class="list-group mb-3">
+                    <!-- Product list will be populated dynamically -->
+                </ul>
+                
+                <p>This operation cannot be undone. Do you want to continue?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirm-uninstall-button">
+                    <i class="fa-solid fa-trash-can me-2"></i> Uninstall
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
