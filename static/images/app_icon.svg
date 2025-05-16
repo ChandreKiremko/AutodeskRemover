@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0696D7" />
+      <stop offset="100%" stop-color="#87BC40" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="60" ry="60" fill="#1E1E1E" />
+  <g transform="translate(106, 166) scale(0.6)">
+    <path d="M211.9 20.1L172.2 88h31.3L243 20.1h-31.1zm-97.9 0L74.5 88h31.2l39.5-67.9h-31.2zM114 49.3L127.8 20h-31.2L57 88h31.2l11.6-19.8h36.8l-7.7 13h15.6l21.8-37.8H114v5.9z" fill="url(#gradient)"/>
+  </g>
+  <g transform="translate(106, 280)">
+    <path d="M40 30 L300 30 L300 40 L40 40 Z" fill="#87BC40" />
+    <path d="M40 60 L260 60 L260 70 L40 70 Z" fill="#0696D7" />
+    <path d="M40 90 L220 90 L220 100 L40 100 Z" fill="#0696D7" />
+    <path d="M300 90 L320 90 L320 100 L300 100 Z" fill="#87BC40" />
+    <path d="M260 60 L280 60 L280 70 L260 70 Z" fill="#87BC40" />
+  </g>
+</svg>
